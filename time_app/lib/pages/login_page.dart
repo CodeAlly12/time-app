@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/ProgressHUD.dart';
@@ -34,7 +35,7 @@ class _Login_pageState extends State<Login_page> {
   }
 
   Widget _FormUI(BuildContext context) {
-    var person;
+   
     return SingleChildScrollView(
         child: Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -70,7 +71,7 @@ class _Login_pageState extends State<Login_page> {
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 25,
-                color: Colors.indigo),
+                color: Colors.brown),
           ),
         ),
         Padding(
@@ -84,11 +85,11 @@ class _Login_pageState extends State<Login_page> {
           }, (onSavedVal) {
             username = onSavedVal;
           },
-              borderFocusColor: Colors.indigo.shade200,
-              prefixIconColor: Colors.indigo.shade200,
-              borderColor: Colors.indigo.shade200,
-              textColor: Colors.indigo,
-              hintColor: Colors.indigo.withOpacity(0.7),
+              borderFocusColor: Colors.brown,
+              prefixIconColor: Colors.brown,
+              borderColor: Colors.brown,
+              textColor: Colors.brown,
+              hintColor: Colors.brown.withOpacity(0.7),
               borderRadius: 10),
         ),
         Padding(
@@ -106,14 +107,95 @@ class _Login_pageState extends State<Login_page> {
               (onSavedVal) {
                 username = onSavedVal;
               },
-              borderFocusColor: Colors.indigo.shade200,
-              prefixIconColor: Colors.indigo.shade200,
-              borderColor: Colors.indigo.shade200,
-              textColor: Colors.indigo,
-              hintColor: Colors.indigo.withOpacity(0.7),
+              borderFocusColor: Colors.brown,
+              prefixIconColor: Colors.brown,
+              borderColor: Colors.brown,
+              textColor: Colors.brown,
+              hintColor: Colors.brown.withOpacity(0.7),
               borderRadius: 10,
               obscureText: hidePassword,
-            ))
+              suffixIcon: IconButton(onPressed:() 
+              {setState(() {
+                hidePassword =!hidePassword;
+              });},
+              color: Colors.brown.withOpacity(0.7) ,
+               icon: Icon(hidePassword ? Icons.visibility_off:Icons.visibility) )
+            )),
+            SizedBox(
+              height: 20),
+              Center(
+                child: FormHelper.submitButton("Login", () {},
+                btnColor:Colors.white,
+                borderColor:Colors.brown,
+                txtColor:Colors.brown,
+                borderRadius: 10
+                 ),
+              ),
+            
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Padding(
+                padding: const EdgeInsets.only(right:25,top: 10),
+                child: RichText(
+                  text:  TextSpan(style: TextStyle(
+                    color: Colors.brown,fontSize: 14.0
+                  ),
+                  children:<TextSpan>[
+                    TextSpan(
+                      text: ' Forgot Password ?',style: TextStyle(
+                        color: Colors.brown,
+                        decoration: TextDecoration.underline,
+                      ),
+                      recognizer: TapGestureRecognizer()..onTap = () {
+                        print("FORGET PASSWORD");
+                      },
+                    ),
+                  ]),),
+              ),
+
+            ),
+            SizedBox(
+              height: 18,
+            ),
+            Center(
+              child: Text("OR",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+                color: Colors.brown,
+              ),),
+            ),
+              SizedBox(
+              height: 18,
+            ),
+             Align(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: const EdgeInsets.only(right:25,top: 10),
+                child: RichText(
+                  text:  TextSpan(style: TextStyle(
+                    color: Colors.brown,fontSize: 14.0
+                  ),
+                  children:<TextSpan>[
+                    TextSpan( text:"Dont have a account yet",style: TextStyle(
+                      color: Colors.brown,
+                      
+                    )),
+
+                    TextSpan(
+                      text: ' SIGN UP',style: TextStyle(
+                        color: Colors.brown,
+                        decoration: TextDecoration.underline,
+                      ),
+                      recognizer: TapGestureRecognizer()..onTap = () {
+                     Navigator.pushNamed(context,"/Signup");
+                      },
+                    ),
+                  ]),),
+              ),
+
+            ),
+            
       ],
     ));
   }
