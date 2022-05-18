@@ -1,6 +1,11 @@
+
 import 'package:flutter/material.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/ProgressHUD.dart';
+import 'package:time_app/config.dart';
+import 'package:time_app/models/register_request.dart';
+import 'package:time_app/services/api_service.dart';
+
 
 
 class Signup_page extends StatefulWidget {
@@ -16,6 +21,14 @@ class _Signup_pageState extends State<Signup_page> {
   GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
   String? username;
   String? password;
+  String? email;
+   
+   
+   @override
+  void initState() {
+    super.initState();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -83,24 +96,7 @@ class _Signup_pageState extends State<Signup_page> {
               hintColor: Colors.brown.withOpacity(0.7),
               borderRadius: 10),
         ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 5,top:10),
-          child: FormHelper.inputFieldWidget(context, "Email", "Email",
-              (onValidateVal) {
-            if (onValidateVal.isEmpty) {
-              return "Email can't be empty";
-            }
-            return null;
-          }, (onSavedVal) {
-            username = onSavedVal;
-          },
-              borderFocusColor: Colors.brown,
-              prefixIconColor: Colors.brown,
-              borderColor: Colors.brown,
-              textColor: Colors.brown,
-              hintColor: Colors.brown.withOpacity(0.7),
-              borderRadius: 10),
-        ),
+        
         Padding(
             padding: const EdgeInsets.only(top: 10),
             child: FormHelper.inputFieldWidget(
@@ -130,39 +126,98 @@ class _Signup_pageState extends State<Signup_page> {
               color: Colors.brown.withOpacity(0.7) ,
                icon: Icon(hidePassword ? Icons.visibility_off:Icons.visibility) )
             )),
-             Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: FormHelper.inputFieldWidget(
-              context,
-              "Confirm password",
-              "Confirm Password",
+            //  Padding(
+            // padding: const EdgeInsets.only(top: 10),
+            // child: FormHelper.inputFieldWidget(
+            //   context,
+            //   "Confirm password",
+            //   "Confirm Password",
+            //   (onValidateVal) {
+            //     if (onValidateVal.isEmpty) {
+            //       return "Password doesn't match";
+            //     }
+            //     return null;
+            //   },
+            //   (onSavedVal) {
+            //     username = onSavedVal;
+            //   },
+            //   borderFocusColor: Colors.brown,
+            //   prefixIconColor: Colors.brown,
+            //   borderColor: Colors.brown,
+            //   textColor: Colors.brown,
+            //   hintColor: Colors.brown.withOpacity(0.7),
+            //   borderRadius: 10,
+            //   obscureText: hidePassword,
+            //   suffixIcon: IconButton(onPressed:() 
+            //   {setState(() {
+            //     hidePassword =!hidePassword;
+            //   });},
+            //   color: Colors.brown.withOpacity(0.7) ,
+            //    icon: Icon(hidePassword ? Icons.visibility_off:Icons.visibility) )
+            // )),
+            Padding(
+          padding:  const EdgeInsets.only(bottom: 5,top:10),
+          child: FormHelper.inputFieldWidget(context, "Email", "Email",
               (onValidateVal) {
-                if (onValidateVal.isEmpty) {
-                  return "Password doesn't match";
-                }
-                return null;
-              },
-              (onSavedVal) {
-                username = onSavedVal;
-              },
+            if (onValidateVal.isEmpty) {
+              return "Email can't be empty";
+            }
+            return null;
+          }, (onSavedVal) {
+            username = onSavedVal;
+          },
               borderFocusColor: Colors.brown,
               prefixIconColor: Colors.brown,
               borderColor: Colors.brown,
               textColor: Colors.brown,
               hintColor: Colors.brown.withOpacity(0.7),
-              borderRadius: 10,
-              obscureText: hidePassword,
-              suffixIcon: IconButton(onPressed:() 
-              {setState(() {
-                hidePassword =!hidePassword;
-              });},
-              color: Colors.brown.withOpacity(0.7) ,
-               icon: Icon(hidePassword ? Icons.visibility_off:Icons.visibility) )
-            )),
-            SizedBox(
+              borderRadius: 10),
+        ),
+            const SizedBox(
               height: 20),
               Center(
-                child: FormHelper.submitButton("SIGNUP", () {},
+              child: FormHelper.submitButton("SIGNUP", () {
+                if (validateAndSave()) {
+                  setState(() {
+                    isAPIcallProcess = true;
+                  });
+
+                  RegisterRequestModel model = RegisterRequestModel(
+                  username: username!,
+                  password:  password!,
+                  email: email!,);
+
+                  APIService. Register(model).then(
+                    (response) {
+                      setState(() {
+                        isAPIcallProcess= false;
+                      });
+
+                      if (response.data != null) { 
+                        FormHelper.showSimpleAlertDialog(
+                          context,
+                          config.appName,
+                          "Signup Successful. Please login to the account",
+                          "OK",
+                          () {
+                            Navigator.pushNamedAndRemoveUntil(
+                              context,
+                              '/',
+                              (route) => false,
+                            );
+                          },
+                        );
+                      } else {
+                        FormHelper.showSimpleAlertDialog(context, config.appName,"email already exists","OK ", (){
+                          Navigator.of(context).pop();
+                        },);
+                      }
+                    },
+                  );
+                }
+                  
+                
+                },
                 btnColor:Colors.white,
                 borderColor:Colors.brown,
                 txtColor:Colors.brown,
@@ -171,5 +226,17 @@ class _Signup_pageState extends State<Signup_page> {
               ),
       ],
     ));
+  }
+
+  bool validateAndSave (){
+    final form  = globalFormKey.currentState;
+    if(form!.validate()){
+      form.save();
+      return true;
+    
+    }
+    else {
+      return false;
+    }
   }
 }

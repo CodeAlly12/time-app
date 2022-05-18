@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:time_app/pages/login_page.dart';
-import 'package:time_app/pages/signup_page.dart';
+import 'package:time_app/pages/Signup_page.dart';
+import 'package:time_app/pages/home_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,7 +20,8 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.deepPurple,
         ),
         routes: {
-          '/': (context) => const Login_page(),
+          '/login': (context) => const Login_page(),
+          '/home': (context) => const HomePage(),
           '/Signup': (context) => const Signup_page()
         });
   }

@@ -2,6 +2,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/ProgressHUD.dart';
+import 'package:time_app/config.dart';
+import 'package:time_app/models/login_request_model.dart';
+import 'package:time_app/services/api_service.dart';
 
 class Login_page extends StatefulWidget {
   const Login_page({Key? key}) : super(key: key);
@@ -124,7 +127,30 @@ class _Login_pageState extends State<Login_page> {
             SizedBox(
               height: 20),
               Center(
-                child: FormHelper.submitButton("Login", () {},
+                child: FormHelper.submitButton("Login", () {
+                  if(validateAndSave()){
+                    setState(() {
+                      isAPIcallProcess =true;
+                    });
+                    LoginRequestModel model = LoginRequestModel(
+                      username: username!, 
+                      password: password!
+                    );
+                    APIService.login(model).then ((response)=> {if (response)
+                    {
+                      Navigator.pushNamedAndRemoveUntil(
+                        context,'/home', 
+                        (route) => false)
+                    }
+                    else {
+                      FormHelper.showSimpleAlertDialog(context, config.appName,"invalid Username/Password!","OK", (){
+                        Navigator.pop(context);
+                      })
+                    },
+
+                  });
+                  }
+                },
                 btnColor:Colors.white,
                 borderColor:Colors.brown,
                 txtColor:Colors.brown,
@@ -198,5 +224,16 @@ class _Login_pageState extends State<Login_page> {
             
       ],
     ));
+  }
+  bool validateAndSave (){
+    final form  = globalFormKey.currentState;
+    if(form!.validate()){
+      form.save();
+      return true;
+    
+    }
+    else {
+      return false;
+    }
   }
 }
