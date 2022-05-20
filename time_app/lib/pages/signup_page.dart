@@ -23,12 +23,6 @@ class _Signup_pageState extends State<Signup_page> {
   String? password;
   String? email;
    
-   
-   @override
-  void initState() {
-    super.initState();
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -126,35 +120,6 @@ class _Signup_pageState extends State<Signup_page> {
               color: Colors.brown.withOpacity(0.7) ,
                icon: Icon(hidePassword ? Icons.visibility_off:Icons.visibility) )
             )),
-            //  Padding(
-            // padding: const EdgeInsets.only(top: 10),
-            // child: FormHelper.inputFieldWidget(
-            //   context,
-            //   "Confirm password",
-            //   "Confirm Password",
-            //   (onValidateVal) {
-            //     if (onValidateVal.isEmpty) {
-            //       return "Password doesn't match";
-            //     }
-            //     return null;
-            //   },
-            //   (onSavedVal) {
-            //     username = onSavedVal;
-            //   },
-            //   borderFocusColor: Colors.brown,
-            //   prefixIconColor: Colors.brown,
-            //   borderColor: Colors.brown,
-            //   textColor: Colors.brown,
-            //   hintColor: Colors.brown.withOpacity(0.7),
-            //   borderRadius: 10,
-            //   obscureText: hidePassword,
-            //   suffixIcon: IconButton(onPressed:() 
-            //   {setState(() {
-            //     hidePassword =!hidePassword;
-            //   });},
-            //   color: Colors.brown.withOpacity(0.7) ,
-            //    icon: Icon(hidePassword ? Icons.visibility_off:Icons.visibility) )
-            // )),
             Padding(
           padding:  const EdgeInsets.only(bottom: 5,top:10),
           child: FormHelper.inputFieldWidget(context, "Email", "Email",
@@ -164,16 +129,16 @@ class _Signup_pageState extends State<Signup_page> {
             }
             return null;
           }, (onSavedVal) {
-            username = onSavedVal;
+            email = onSavedVal;
           },
               borderFocusColor: Colors.brown,
               prefixIconColor: Colors.brown,
               borderColor: Colors.brown,
               textColor: Colors.brown,
               hintColor: Colors.brown.withOpacity(0.7),
-              borderRadius: 10),
-        ),
-            const SizedBox(
+              borderRadius: 10),),
+        
+             const SizedBox(
               height: 20),
               Center(
               child: FormHelper.submitButton("SIGNUP", () {
@@ -182,12 +147,13 @@ class _Signup_pageState extends State<Signup_page> {
                     isAPIcallProcess = true;
                   });
 
-                  RegisterRequestModel model = RegisterRequestModel(
-                  username: username!,
-                  password:  password!,
-                  email: email!,);
+                  RegisterRequestModel model= RegisterRequestModel(
+                  username: username,
+                  password:  password,
+                  email: email);
 
-                  APIService. Register(model).then(
+
+                  APIService.Register(model).then(
                     (response) {
                       setState(() {
                         isAPIcallProcess= false;
@@ -201,14 +167,13 @@ class _Signup_pageState extends State<Signup_page> {
                           "OK",
                           () {
                             Navigator.pushNamedAndRemoveUntil(
-                              context,
-                              '/',
+                              context,'/',
                               (route) => false,
                             );
                           },
                         );
                       } else {
-                        FormHelper.showSimpleAlertDialog(context, config.appName,"email already exists","OK ", (){
+                        FormHelper.showSimpleAlertDialog(context, config.appName,response.message,"OK ", (){
                           Navigator.of(context).pop();
                         },);
                       }

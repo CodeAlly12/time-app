@@ -124,7 +124,7 @@ class _Login_pageState extends State<Login_page> {
               color: Colors.brown.withOpacity(0.7) ,
                icon: Icon(hidePassword ? Icons.visibility_off:Icons.visibility) )
             )),
-            SizedBox(
+            const SizedBox(
               height: 20),
               Center(
                 child: FormHelper.submitButton("Login", () {
@@ -133,20 +133,26 @@ class _Login_pageState extends State<Login_page> {
                       isAPIcallProcess =true;
                     });
                     LoginRequestModel model = LoginRequestModel(
-                      username: username!, 
-                      password: password!
-                    );
-                    APIService.login(model).then ((response)=> {if (response)
-                    {
-                      Navigator.pushNamedAndRemoveUntil(
+                    username: username,
+                    password: password,
+                  );
+                   
+                  APIService.login(model).then(
+                    (response) {
+                      setState(() {
+                       isAPIcallProcess = false;
+                      });
+                     if (response){
+
+                    Navigator.pushNamedAndRemoveUntil(
                         context,'/home', 
-                        (route) => false)
+                        (route) => false);
                     }
                     else {
                       FormHelper.showSimpleAlertDialog(context, config.appName,"invalid Username/Password!","OK", (){
                         Navigator.pop(context);
-                      })
-                    },
+                      });
+                    };
 
                   });
                   }
@@ -163,12 +169,12 @@ class _Login_pageState extends State<Login_page> {
               child: Padding(
                 padding: const EdgeInsets.only(right:25,top: 10),
                 child: RichText(
-                  text:  TextSpan(style: TextStyle(
+                  text:  TextSpan(style: const TextStyle(
                     color: Colors.brown,fontSize: 14.0
                   ),
                   children:<TextSpan>[
                     TextSpan(
-                      text: ' Forgot Password ?',style: TextStyle(
+                      text: ' Forgot Password ?',style: const TextStyle(
                         color: Colors.brown,
                         decoration: TextDecoration.underline,
                       ),
@@ -180,10 +186,10 @@ class _Login_pageState extends State<Login_page> {
               ),
 
             ),
-            SizedBox(
+            const SizedBox(
               height: 18,
             ),
-            Center(
+            const Center(
               child: Text("OR",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -191,7 +197,7 @@ class _Login_pageState extends State<Login_page> {
                 color: Colors.brown,
               ),),
             ),
-              SizedBox(
+              const SizedBox(
               height: 18,
             ),
              Align(
@@ -199,22 +205,22 @@ class _Login_pageState extends State<Login_page> {
               child: Padding(
                 padding: const EdgeInsets.only(right:25,top: 10),
                 child: RichText(
-                  text:  TextSpan(style: TextStyle(
+                  text:  TextSpan(style: const TextStyle(
                     color: Colors.brown,fontSize: 14.0
                   ),
                   children:<TextSpan>[
-                    TextSpan( text:"Dont have a account yet",style: TextStyle(
+                    const TextSpan( text:"Dont have a account yet",style: TextStyle(
                       color: Colors.brown,
                       
                     )),
 
                     TextSpan(
-                      text: ' SIGN UP',style: TextStyle(
+                      text: ' SIGN UP',style: const TextStyle(
                         color: Colors.brown,
                         decoration: TextDecoration.underline,
                       ),
                       recognizer: TapGestureRecognizer()..onTap = () {
-                     Navigator.pushNamed(context,"/Signup");
+                     Navigator.pushNamed(context,'/Signup');
                       },
                     ),
                   ]),),

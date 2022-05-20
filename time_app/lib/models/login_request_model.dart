@@ -5,8 +5,8 @@ LoginRequestModel({
   required this.password});
 	
   
-  late final String username;
-	late final String password;
+  late final String? username;
+	late final String? password;
 
 	
 

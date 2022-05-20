@@ -5,12 +5,14 @@ import 'package:time_app/config.dart';
 import 'package:time_app/models/login_request_model.dart';
 import 'package:time_app/models/login_response_model.dart';
 import 'package:time_app/models/register_request.dart';
+import 'package:time_app/models/register_response.dart';
 import 'package:time_app/services/shared_service.dart';
+
 
 class APIService {
   static var client = http.Client();
 
- static Future<bool> login (LoginRequestModel model ) async {
+ static Future<bool> login(LoginRequestModel model ) async {
   Map <String,String> requestHeaders = {'Content-Type': 'application/json',
 
   };
@@ -24,7 +26,7 @@ class APIService {
   );
   
   if (response.statusCode == 200){
-    // SHARED
+
     await SharedService.setLoginDetails(loginResponseJson(response.body));
     return true;
   }
@@ -34,7 +36,7 @@ class APIService {
   }
    }
   
- static Future< RegisterRequestModel>  Register ( RegisterRequestModel model, ) async {
+ static Future<RegisterResponseModel>  Register( RegisterRequestModel model, ) async {
   Map <String,String> requestHeaders = {'Content-Type': 'application/json',
 
   };
@@ -47,9 +49,12 @@ class APIService {
   body: jsonEncode(model.toJson ()),
   );
 
-  return  RegisterRequestModel(response.body);
+  return  RegisterResponseJson(response.body);
   }
 }
+
+
+
  
   
 

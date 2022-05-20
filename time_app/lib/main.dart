@@ -20,9 +20,10 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.deepPurple,
         ),
         routes: {
-          '/login': (context) => const Login_page(),
+          '/': (context) => const Login_page(),
+           
           '/home': (context) => const HomePage(),
-          '/Signup': (context) => const Signup_page()
+          '/Signup': (context) => Signup_page()
         });
   }
 }
